@@ -7,8 +7,11 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 
-public class Vision{
-	AxisCamera camera = new AxisCamera("10.1.91.100");
+public class Vision extends AxisCamera{
+	public Vision(String cameraHost) {
+		super(cameraHost);
+		// TODO Auto-generated constructor stub
+	}
 	Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 	//Need to find correct IP address for the camera.
 	//I'm pretty sure that this just sets the camera to the name of camera.
@@ -17,10 +20,10 @@ public class Vision{
 		ColorImage image = null;
 		BinaryImage thresholdImage = null;
 		try{
-			
-		}catch(Exception ex){
-			image = camera.getImage();//Why is this throwing a warning?
+			image = this.getImage();//Why is this throwing a warning?
 			thresholdImage = image.thresholdRGB(0, 45, 25, 255, 0, 45); //Filters out most of the non-green. We use green lights, so the green should  be what we need to see.
+		}catch(Exception ex){
+			
 		}finally{
 			
 		}
