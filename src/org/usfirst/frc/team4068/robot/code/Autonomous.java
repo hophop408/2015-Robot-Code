@@ -5,14 +5,11 @@
 
 package org.usfirst.frc.team4068.robot.code;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Autonomous implements Runnable{
     private String thread;
     private boolean run = false;
-    
-    DoubleSolenoid solenoid1 = new DoubleSolenoid(0, 0, 1);
     
     public Autonomous(String thread){
         this.thread = thread;
@@ -41,10 +38,6 @@ public class Autonomous implements Runnable{
     
     public boolean getRun(){
         return run;
-    }
-    
-    public void free(){
-        solenoid1.free();
     }
     
     private void test1(){

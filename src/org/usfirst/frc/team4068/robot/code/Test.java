@@ -5,20 +5,17 @@
  */
 package org.usfirst.frc.team4068.robot.code;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Relay;
+import org.usfirst.frc.team4068.robot.lib.Motor;
+import org.usfirst.frc.team4068.robot.lib.References;
+
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
 
 public class Test implements Runnable{
     private String thread;
     private boolean run = false;
     
-    //DoubleSolenoid solenoid1 = new DoubleSolenoid(0, 0, 1);
-    
     public Test(String thread){
         this.thread = thread;
-        //solenoid1.stopLiveWindowMode();
     }
     
     public void run(){
@@ -27,6 +24,8 @@ public class Test implements Runnable{
             test1();
         }else if (thread.equals("thread2")){
             test2();
+        }else if (thread.equals("thread3")){
+            test3();
         }
         run = false;
     }
@@ -40,11 +39,7 @@ public class Test implements Runnable{
         return run;
     }
     
-    public void free(){
-        //solenoid1.free();
-        //lights.free();
-    }
-   Victor jarvis = new Victor(5);
+    Motor jarvis = References.LIGHTS;
     private void test1(){
         //solenoid1.set(DoubleSolenoid.Value.kForward);
         //Timer.delay(3);
@@ -74,6 +69,10 @@ public class Test implements Runnable{
     }
     
     private void test2(){
+        
+    }
+    
+    private void test3(){
         
     }
 }

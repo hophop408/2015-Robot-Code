@@ -7,6 +7,26 @@
 
 package org.usfirst.frc.team4068.robot.code;
 
-public class Global {
+import org.usfirst.frc.team4068.robot.lib.References;
 
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+
+public class Global implements Runnable{
+    
+    BuiltInAccelerometer accel = References.ACCELEROMETER;
+    
+    public Global(){
+        
+    }
+
+    public void run() {
+        while(true){
+            
+        }
+    }
+    
+    public void start(){
+        Thread t = new Thread(this);
+        t.start();
+    }
 }

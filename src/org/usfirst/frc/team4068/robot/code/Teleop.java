@@ -3,28 +3,20 @@
  */
 package org.usfirst.frc.team4068.robot.code;
 
-import org.usfirst.frc.team4068.robot.Robot;
 import org.usfirst.frc.team4068.robot.lib.Motor;
 import org.usfirst.frc.team4068.robot.lib.References;
 import org.usfirst.frc.team4068.robot.lib.XboxController;
 import org.usfirst.frc.team4068.robot.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Victor;
-
 public class Teleop implements Runnable{
     private String thread;
     private boolean run = false;
     
-    //private Talon motor0 = new Talon(References.PWM_MOTOR);
-    //private Talon motor1 = new Talon(1);
-    //private Talon motor2 = new Talon(2);
-    //private Talon motor3 = new Talon(3);
-    //private Talon motor4 = new Talon(4);
-    //private Victor motor5 = new Victor(5);
-    private XboxController driver = new XboxController(References.USB_DRIVER);
+    DriveTrain drive = References.DRIVE;
+    
+    Motor lights = References.LIGHTS;
+    
+    XboxController driver = References.DRIVER;
     
     public Teleop(String thread){
         this.thread = thread;
@@ -43,40 +35,12 @@ public class Teleop implements Runnable{
         run = false;
     }
     
-    public void free(){
-        //motor0.free();
-        //motor1.free();
-        //motor2.free();
-        //motor3.free();
-        //motor4.free();
-        //motor5.free();
-        driver = null;
-    }
-    
-    //RobotDrive drive = new RobotDrive(References.FL, References.BL, References.FR, References.BR);
-    Motor FL = References.FL;
-    Motor FR = References.FL;
-    Motor BL = References.FL;
-    Motor BR = References.FL;
-    Victor jarvis = new Victor(5);
     private void drive(){
-        //drive.arcadeDrive(driver.getLeftY(), driver.getLeftX());
+        double x = (driver.getLeftX()>=.15||driver.getLeftX()<=-.18 ? driver.getLeftX() : 0);
+        double y = (driver.getLeftY()>=.15||driver.getLeftY()<=-.15 ? driver.getLeftY() : 0);
+        double r = (driver.getRightX()>=.15||driver.getRightX()<=-.2 ? driver.getRightX() : 0);
         
-        //double x = driver.getLeftX();
-        //double y = driver.getLeftY();
-        //double r = driver.getRightX();
-        
-        //double fl = y -x +r;
-        //double fr = -y -x +r;
-        //double bl = y +x +r;
-        //double br = -y +x +r;
-        
-        jarvis.set(.1);
-        
-        //FL.set(1);
-        ///FR.set(1);
-        //BL.set(1);
-        //BR.set(1);
+        drive.drive(x, y, r);
         
     }
     //DriveTrain d = new DriveTrain();
