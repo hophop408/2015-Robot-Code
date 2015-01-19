@@ -19,30 +19,18 @@ public class Vision extends AxisCamera{
 	public void imageRetrieval() {
 		ColorImage image = null;
 		BinaryImage thresholdImage = null;
+		BinaryImage bigObjectsImage = null;
+		BinaryImage convexHullImage = null;
 		try{
-			image = this.getImage();//Why is this throwing a warning?
+			image = this.getImage();
 			thresholdImage = image.thresholdRGB(0, 45, 25, 255, 0, 45); //Filters out most of the non-green. We use green lights, so the green should  be what we need to see.
+			bigObjectsImage = thresholdImage.removeSmallObjects(false, 2); //Filters small particles.
+			convexHullImage = bigObjectsImage.convexHull(false); //The video said that this fills the rectangles or something like that. I don't understand why.
+			
 		}catch(Exception ex){
 			
 		}finally{
 			
 		}
 	}
-	
-	//Commented out this whole section because I don't think we'll be using it. 
-	/*public void thing(){
-		
-		//NIVision.Rect rect = new NIVision.Rect(10, 10, 100, 100); Only important if drawShapeOnImage pans out.
-		
-		//While statement appears to check if robot is enabled and operator controlled. Operator Control might need to be removed.
-		
-		//This part only happens if something? I don't know. Work to resolve.
-		ColorImage image = camera.getImage();
-		BinaryImage thresholdImage = image.thresholdRGB(0, 45, 25, 255, 0, 45); //Filters out most of the non-green. We use green lights, so the green should  be what we need to see.
-		//camera.getImage(frame); //Gets the image? Not sure if this or the above is correct
-		
-		//NIVision.imaqDrawShapeOnImage(frame, frame, rect, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_RECT, 0.0f);
-		//No clue if above is even necessary or useful.
-		//Can use setImage() to send this image with the rectangle to places.
-	}*/
 }
