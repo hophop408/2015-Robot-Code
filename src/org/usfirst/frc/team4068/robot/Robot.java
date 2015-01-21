@@ -7,6 +7,7 @@ import org.usfirst.frc.team4068.robot.code.Test;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -42,12 +43,12 @@ public class Robot extends IterativeRobot {
         Timer time = new Timer();
         time.start();
         while (isAutonomous() && isEnabled() && (time.get() < 15)){
-            if (true){
-                //start
+            if (!auto1.getRun()){
+                auto1.start();
             }
         }
         time.stop();
-        System.out.printf("Autonomous Disabled, ran for: %n", time.get());
+        System.out.printf("Autonomous Disabled, ran for: %f", time.get());
     }
 
     /**
@@ -60,27 +61,18 @@ public class Robot extends IterativeRobot {
             if (!teleDrive.getRun()){ //If a thread is not running, start it again
                 teleDrive.start();
             }
-            //if (!tele2.getRun()){
-                //tele2.start();
-            //}
+            if (!tele2.getRun()){
+                tele2.start();
+            }
         }
         time.stop();
-        System.out.printf("Teleop Disabled, ran for: %n", time.get());
+        System.out.printf("Teleop Disabled, ran for: %f", time.get());
     }
     
     /**
      * Test mode
      */
     public void testPeriodic() {
-        Timer time = new Timer();
-        time.start();
-        while (isTest() && isEnabled()){
-            if (!test1.getRun()){
-                test1.start();
-            }
-        }
-        time.stop();
-        System.out.printf("Test Disabled, ran for: %n", time.get());
     }
     
     public void disabledInit(){

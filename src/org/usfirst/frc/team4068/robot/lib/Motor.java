@@ -16,6 +16,6 @@ public class Motor extends Talon{
     }
     
     public void set(double speed){
-        this.set(invert ? -speed : speed);
+        super.set(invert ? -speed : speed);
     }
 }

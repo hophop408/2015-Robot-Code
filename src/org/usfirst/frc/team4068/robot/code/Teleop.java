@@ -8,6 +8,10 @@ import org.usfirst.frc.team4068.robot.lib.References;
 import org.usfirst.frc.team4068.robot.lib.XboxController;
 import org.usfirst.frc.team4068.robot.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Teleop implements Runnable{
     private String thread;
     private boolean run = false;
@@ -42,10 +46,32 @@ public class Teleop implements Runnable{
         
         drive.drive(x, y, r);
         
+        //System.out.println("test");
     }
-    //DriveTrain d = new DriveTrain();
+    
+    AnalogInput ultrasonic = References.ULTRASONIC;
+    Encoder encoder1 = References.ENCODER1;
+    Motor encoder_motor = References.MOTOR.ENCODER;
+    int count = 0;
     private void thread2(){
-        //d.drive();
+        count++;
+        System.out.println("test");
+        double volts = ultrasonic.getAverageVoltage();
+        double cm = volts/1024;
+        String out = String.format("Distance: %f cm", cm);
+        System.out.println(out);
+        SmartDashboard.putNumber("Ultrasonic Distance", cm);
+        /*System.out.println(encoder1.getRaw());
+        if (count > 0 && count < 2000){
+            encoder_motor.set(.2);
+        }else if(count > 2000 && count < 4000){
+            encoder_motor.set(0);
+        }else if(count > 4000 && count < 6000){
+            encoder_motor.set(.2);
+        }else{
+            encoder_motor.set(0);
+        }
+        */
     }
     
     private void thread3(){
