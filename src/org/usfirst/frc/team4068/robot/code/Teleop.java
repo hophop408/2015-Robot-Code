@@ -9,7 +9,9 @@ import org.usfirst.frc.team4068.robot.lib.XboxController;
 import org.usfirst.frc.team4068.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Teleop implements Runnable{
@@ -32,7 +34,7 @@ public class Teleop implements Runnable{
         if (thread.equals("thread1")){
             drive();
         }else if (thread.equals("thread2")){
-            thread2();
+            //thread2();
         }else if (thread.equals("thread3")){
             thread3();
         }
@@ -44,14 +46,14 @@ public class Teleop implements Runnable{
         double y = (driver.getLeftY()>=.15||driver.getLeftY()<=-.15 ? driver.getLeftY() : 0);
         double r = (driver.getRightX()>=.15||driver.getRightX()<=-.2 ? driver.getRightX() : 0);
         
-        drive.drive(x, y, r);
+        //drive.drive(x, y, r);
         
         //System.out.println("test");
     }
     
     AnalogInput ultrasonic = References.ULTRASONIC;
-    Encoder encoder1 = References.ENCODER1;
-    Motor encoder_motor = References.MOTOR.ENCODER;
+    //Encoder encoder1 = References.ENCODER1;
+    //Motor encoder_motor = References.MOTOR.ENCODER;
     int count = 0;
     private void thread2(){
         count++;
@@ -74,8 +76,35 @@ public class Teleop implements Runnable{
         */
     }
     
+    DigitalInput limit = References.LIMIT1;
+    
+    Motor belt = References.MOTOR.DRIVE_FL;
+    
+    
+    
     private void thread3(){
+        if (limit.get()){
+            lights.set(.2);
+        }else{
+            lights.set(0);
+        }
         
+        References.vert.set(driver.getRightY());
+        References.hor.set(driver.getRightX());
+        
+        belt.set(-driver.getRightY());
+        
+        
+        
+        /*
+        if (driver.getButtonA()){
+            belt.set(.5);
+        }else if(driver.getButtonB()){
+            belt.set(-.5);
+        }else{
+            belt.set(0);
+        }
+        */
     }
     
     public boolean getRun(){

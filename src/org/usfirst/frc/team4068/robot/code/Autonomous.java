@@ -8,6 +8,7 @@ package org.usfirst.frc.team4068.robot.code;
 import org.usfirst.frc.team4068.robot.lib.Motor;
 import org.usfirst.frc.team4068.robot.lib.References;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -57,15 +58,15 @@ public class Autonomous implements Runnable{
             encoder1.reset();
         }
         int rotations = (encoder1.get())/497;
-        //if (count > 0 && count < 2000){
-            //encoder_motor.set(.5);
-        //}else if(count > 2000 && count < 4000){
-            //encoder_motor.set(0);
-        //}else if(count > 4000 && count < 6000){
-            //encoder_motor.set(.5);
-        //}else{
-            //encoder_motor.set(0);
-        //}
+        if (count > 0 && count < 2000){
+            encoder_motor.set(.5);
+        }else if(count > 2000 && count < 4000){
+            encoder_motor.set(0);
+        }else if(count > 4000 && count < 6000){
+            encoder_motor.set(.5);
+        }else{
+            encoder_motor.set(0);
+        }
         if (rotations >= 20){
             encoder_motor.set(0);
         }else{
@@ -73,8 +74,13 @@ public class Autonomous implements Runnable{
         }
     }
     
+    //DigitalInput limit = References.LIMIT1;
+    Motor lights = References.LIGHTS;
+    
     private void test2(){
-        
+        //if(limit.get()){
+            //lights.set(.5);
+        //}
     }
     
     private void test3(){

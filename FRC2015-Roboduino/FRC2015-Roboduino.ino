@@ -1,4 +1,6 @@
+//Arduino (Uno) code for 2015 FRC game - by Team 4068 Bearbotics
 #include <LiquidCrystal.h>
+#include <Wire.h>
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
@@ -17,7 +19,7 @@ String offMessage = "Robot Disabled";
 boolean isTeleop = false;
 boolean isAuto = false;
 boolean isTest = false;
-boolean isDisabled = true;
+boolean isDisabled = false;
 
 // communications
 boolean isComm = false;
@@ -42,9 +44,15 @@ String last = bootMessage; // used to test if the text being printed has changed
 //PWMs
 int backlight = 9;
 
+//I^2C settings
+int address = 84; //what address to use to recieve data from roboRIO (master)
+
 void setup() {
-  //Set up communication with the roboRIO at 115200 baud
-  Serial.begin(115200);
+  //Set up communication with the roboRIO (serial) at 115200 baud or (I2C) specified address
+  Serial.begin(9600);
+  Wire.begin(address);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -74,9 +82,11 @@ void loop() {
       printMess(offMessage, 0);
     }
   }else{
-    printMess(bootMessage, 0);
+      printMess(bootMessage, 0);
   }
   
+  
+  // DEPRECATED CODE FOR SERIAL COMMUNICATION ----------------------------------------------------------------------------------------
   // gets data from comm channel if communications are up, or attempts to restore comms if they are down
   if (isComm){
     runComm();
@@ -86,6 +96,21 @@ void loop() {
   
   //prints the time the arduino has been running on the screen
   printTime();
+}
+
+void receiveEvent(int howMany){
+  while(Wire.available()){
+    int in = Wire.read();
+    if (in == 76){
+      isComm = true;
+      isDisabled = true;
+    }
+  }
+}
+
+//Called when the roboRIO asks for data - receiveEvent should be called right before this (by the roboRIO sending data - not by the arduino code) to decide what should be sent in responce
+void requestEvent(){
+  
 }
 
 // ran if not communicating with roboRIO - waits for serial activity and then updates comm status based on what is received
