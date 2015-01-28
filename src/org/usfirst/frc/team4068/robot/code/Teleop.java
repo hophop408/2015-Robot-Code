@@ -95,7 +95,6 @@ public class Teleop implements Runnable{
         belt.set(-driver.getRightY());
         
         
-        
         /*
         if (driver.getButtonA()){
             belt.set(.5);
