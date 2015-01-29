@@ -38,10 +38,10 @@ public class DriveTrain {
         BR.set(br);
     }
     
-    
+    //Samples encoders for current speed in rpm (should be sampled over 5ms)
     double time_start = time.get();
     private int[] getMotorSpeeds(double sample_time){
-        int speeds[] = {1, 1, 1, 1};
+        int speeds[] = {0, 0, 0, 0};
         
         int start_count = e.get();
         if (time.get() - time_start > sample_time){
