@@ -42,11 +42,11 @@ public class Teleop implements Runnable{
     }
     
     private void drive(){
-        double x = (driver.getLeftX()>=.15||driver.getLeftX()<=-.18 ? driver.getLeftX() : 0);
-        double y = (driver.getLeftY()>=.15||driver.getLeftY()<=-.15 ? driver.getLeftY() : 0);
-        double r = (driver.getRightX()>=.15||driver.getRightX()<=-.2 ? driver.getRightX() : 0);
+        double x = -(driver.getLeftX()>=.15||driver.getLeftX()<=-.18 ? driver.getLeftX() : 0);
+        double y = -(driver.getLeftY()>=.15||driver.getLeftY()<=-.15 ? driver.getLeftY() : 0);
+        double r = -(driver.getRawAxis(3)>=.15||driver.getRawAxis(3)<=-.2 ? driver.getRawAxis(3) : 0);
         
-        //drive.drive(x, y, r);
+        drive.drive(x, y, r);
         
         //System.out.println("test");
     }
@@ -78,7 +78,7 @@ public class Teleop implements Runnable{
     
     DigitalInput limit = References.LIMIT1;
     
-    Motor belt = References.MOTOR.DRIVE_FL;
+    Motor belt = References.MOTOR.BELT;
     
     
     

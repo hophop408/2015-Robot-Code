@@ -50,7 +50,9 @@ public class References {
         public static final int DRIVE_BL = 2;
         public static final int DRIVE_BR = 3;
         
-        public static final int ENCODER_MOTOR = 4;
+        public static final int BELT = 4;
+        
+        public static final int ENCODER_MOTOR = 8;
         
         public static final int LIGHTS = 5;
     }
@@ -71,7 +73,9 @@ public class References {
         public static Motor DRIVE_BL = new Motor(PWM.DRIVE_BL);
         public static Motor DRIVE_BR = new Motor(PWM.DRIVE_BR);
         
-        public static Motor ENCODER = new Motor(4);
+        public static Motor BELT = new Motor(PWM.BELT);
+        
+        public static Motor ENCODER = new Motor(8);
         
     }
     
