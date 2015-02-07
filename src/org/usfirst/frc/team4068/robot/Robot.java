@@ -1,11 +1,11 @@
  package org.usfirst.frc.team4068.robot;
-//Yolo Robot 2015 URSA ELECTRONICA.
 import org.usfirst.frc.team4068.robot.code.Autonomous;
 import org.usfirst.frc.team4068.robot.code.Teleop;
 import org.usfirst.frc.team4068.robot.code.Test;
 import org.usfirst.frc.team4068.robot.lib.References;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Robot extends IterativeRobot {
     //Declarations
-    References r = new References(); // This will never be used, but is necessary to pre-load contents of References.java
+    References refs = new References(); // This will never be used, but is necessary to pre-load contents of References.java
     //Threads
     public static Teleop teleDrive = new Teleop("thread1");
     public static Teleop tele2 = new Teleop("thread2");
@@ -47,11 +47,6 @@ public class Robot extends IterativeRobot {
         //toSend[0] = 76;
         //arduino.transaction(toSend, 1, null, 0);
         //serial.writeString("Comm:ping");
-        try{
-            Encoder e = new Encoder(References.DIO.ENCODER_CHA, References.DIO.ENCODER_CHB, false, EncodingType.k4X);
-        }catch (Exception e){
-            System.out.println(e);
-        }
     }
 
     /**
@@ -65,13 +60,22 @@ public class Robot extends IterativeRobot {
         time.start();
         
         //meat
-        while (isAutonomous() && isEnabled() && (time.get() < 15)){
+        while (isAutonomous() && isEnabled() && (this.m_ds.isFMSAttached()? (time.get() < 15) : true)){
             if (!auto1.getRun()){
                 auto1.start();
+            }
+            if (!auto2.getRun()){
+                auto2.start();
+            }
+            if (!auto3.getRun()){
+                auto3.start();
             }
         }
         
         //end
+        auto1.stop();
+        auto2.stop();
+        auto3.stop();
         time.stop();
         System.out.printf("Autonomous Disabled, ran for: %f", time.get());
         //this.m_ds.InAutonomous(false);
@@ -87,8 +91,8 @@ public class Robot extends IterativeRobot {
         Timer time = new Timer();
         time.start();
         
-        //meat
-        while (isOperatorControl() && isEnabled() && (time.get() <= 135)){
+        //Loops while Teleop is enabled, and if we are attached to an FMS makes sure we stop after 135 seconds (2:15 - the teleop period)
+        while (isOperatorControl() && isEnabled() && (this.m_ds.isFMSAttached()? (time.get() < 135) : true)){
             if (!teleDrive.getRun()){ //If a thread is not running, start it again
                 teleDrive.start();
             }

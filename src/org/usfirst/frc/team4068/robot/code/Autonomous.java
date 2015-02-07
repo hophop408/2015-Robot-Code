@@ -45,15 +45,20 @@ public class Autonomous implements Runnable{
         return run;
     }
     
-    Encoder encoder1 = References.ENCODER1;
+    public void stop(){
+        encoder_motor.set(0);
+        lights.set(0);
+    }
+    
+    //Encoder encoder1 = References.ENCODER1;
     Motor encoder_motor = References.MOTOR.ENCODER;
     int count;
     
     private void test1(){
         count++;
-        encoder1.setDistancePerPulse(7);
+        //encoder1.setDistancePerPulse(7);
         
-        
+        /*
         if (count == 1){
             encoder1.reset();
         }
@@ -72,6 +77,7 @@ public class Autonomous implements Runnable{
         }else{
             encoder_motor.set(1);
         }
+        */
     }
     
     //DigitalInput limit = References.LIMIT1;

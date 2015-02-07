@@ -5,98 +5,130 @@ import java.util.Map;
 
 import org.usfirst.frc.team4068.robot.lib.Motor;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain {
+    
+    private double Kp = .3;
+    private double Ki = 0.0;
+    private double Kd = 0.0;
     
     private Motor FL;
     private Motor FR;
     private Motor BL;
     private Motor BR;
     
-    private Map<Motor, Double> speeds = new HashMap<Motor, Double>(); //Holds conversions for PWMs so that all motors spin at the same speed
+    private PIDController frontLeft;
+    private PIDController frontRight;
+    private PIDController backLeft;
+    private PIDController backRight;
     
     Timer time = new Timer();
     
     public DriveTrain(Motor fl, Motor fr, Motor bl, Motor br){
+        System.out.println("New instance of Drive Train being created");
         FL = fl;
         FR = fr;
         BL = bl;
         BR = br;
         
-        speeds.put(FL, 1.0);
-        speeds.put(FR, 1.0);
-        speeds.put(BL, 1.0);
-        speeds.put(BR, 1.0); //Initializes speed map by giving each motor the default speed of 1x (no change to the PWM value passed)
+        frontLeft = new PIDController(Kp, Ki, Kd, FL.getEncoder(), FL);
+        frontRight = new PIDController(Kp, Ki, Kd, FR.getEncoder(), FR);
+        backLeft = new PIDController(Kp, Ki, Kd, BL.getEncoder(), BL);
+        backRight = new PIDController(Kp, Ki, Kd, BR.getEncoder(), BR);
+        
+        frontLeft.setOutputRange(.2, 1);
+        frontLeft.setInputRange(0, 5);
+        frontRight.setOutputRange(.2, 1);
+        frontRight.setInputRange(0, 5);
+        backLeft.setOutputRange(.2, 1);
+        backLeft.setInputRange(0, 5);
+        backRight.setOutputRange(.2, 1);
+        backRight.setInputRange(0, 5);
         
         time.start();
+        System.out.println("Drive Train created");
     }
     
+    int count = 0;
+    double lastTime = 0;
+    
     public void drive(double movx, double movy, double rot){
+        count++;
         double fl = (movy -movx +rot);
         double fr = (-movy -movx +rot);
         double bl = (movy +movx +rot);
-        double br = (-movy +movx +rot);
+        double br = (-movy +movx +rot); //-1 - 1 values sent to motors
         
-        double[] pwmValues = {fl, fr, bl, br};
+        double flact = FL.getEncoder().getRate()*60; //actual RPM of motor
+        double fract = FR.getEncoder().getRate()*60; //actual RPM of motor
+        double blact = BL.getEncoder().getRate()*60; //actual RPM of motor
+        double bract = BR.getEncoder().getRate()*60; //actual RPM of motor
         
-        calibrate(.02, pwmValues);
+        SmartDashboard.putNumber("FL PWM value", fl);
+        SmartDashboard.putNumber("FR PWM value", fr);
+        SmartDashboard.putNumber("BL PWM value", bl);
+        SmartDashboard.putNumber("BR PWM value", br);
         
-        FL.set(fl);
-        FR.set(fr);
-        BL.set(bl);
-        BR.set(br);
+        //if (time.get() - lastTime > .02){
+            //lastTime = time.get();
+            //cal(fl, fr, bl, br);
+        //}
+        
+        SmartDashboard.putNumber("FL RPM", flact);
+        SmartDashboard.putNumber("FR RPM", fract);
+        SmartDashboard.putNumber("BL RPM", blact);
+        SmartDashboard.putNumber("BR RPM", bract);
+        
+        FL.set((fl > .2 || fl < -.2)? (fl * flmult) : 0);
+        FR.set((fr > .2 || fr < -.2)? (fr * frmult) : 0);
+        BL.set((bl > .2 || bl < -.2)? (bl * blmult) : 0);
+        BR.set((br > .2 || br < -.2)? (br * brmult) : 0);
+        
     }
     
-    private void calibrate(double sample_time, double[] pwmValues){
-        int[] speeds = getMotorSpeeds(sample_time);
+    double flmult = 1;
+    double frmult = 1;
+    double blmult = 1;
+    double brmult = 1;
+    
+    public void cal(double fl, double fr, double bl, double br){
+        double flest = fl * 600; //The estimated RPM of the motor - max rpm is about 600
+        double frest = fr * 600; //The estimated RPM of the motor - max rpm is about 600
+        double blest = bl * 600; //The estimated RPM of the motor - max rpm is about 600
+        double brest = br * 600; //The estimated RPM of the motor - max rpm is about 600
         
-        double[] multipliers = {1, 1, 1, 1};
+        double flact = FL.getEncoder().getRate()*60; //actual RPM of motor
+        double fract = FR.getEncoder().getRate()*60; //actual RPM of motor
+        double blact = BL.getEncoder().getRate()*60; //actual RPM of motor
+        double bract = BR.getEncoder().getRate()*60; //actual RPM of motor
         
-        int lowestSpeed = Integer.MAX_VALUE;
+        double flerr = flest / flact;
+        double frerr = frest / fract;
+        double blerr = blest / blact;
+        double brerr = brest / bract;
         
-        for (int i = 0; i < 4; i++){ //Finds and stores the lowest value
-            speeds[i] = Math.round((float)(pwmValues[i] * speeds[i])); //Weights speeds based on pwm value sent to that motor
-            if (speeds[i] < lowestSpeed){
-                lowestSpeed = speeds[i];
+        double[] array = {flerr, frerr, blerr, brerr};
+        
+        double smallest = Double.MAX_VALUE;
+        
+        for (int i = 0; i < array.length; i++){ // puts the smallest error value in the largest variable
+            if (array[i] > smallest){
+                smallest = array [i];
             }
         }
         
-        for (int i = 0; i < 4; i++){ //Sets multipliers so that each motor spins at the same speed 
-                                     //based on the lowest speed motor
-            multipliers[i] = speeds[i] / lowestSpeed;
-        }
+        flmult = flerr / smallest; // gets a value from 0 - 1 to modify the pwm being sent
+        frmult = frerr / smallest; // gets a value from 0 - 1 to modify the pwm being sent
+        blmult = blerr / smallest; // gets a value from 0 - 1 to modify the pwm being sent
+        brmult = brerr / smallest; // gets a value from 0 - 1 to modify the pwm being sent
         
-        this.speeds.replace(FL, multipliers[0]);
-        this.speeds.replace(FR, multipliers[1]);
-        this.speeds.replace(BL, multipliers[2]);
-        this.speeds.replace(BR, multipliers[3]);
+        SmartDashboard.putNumber("FL RPM", flact);
+        SmartDashboard.putNumber("FR RPM", fract);
+        SmartDashboard.putNumber("BL RPM", blact);
+        SmartDashboard.putNumber("BR RPM", bract);
     }
     
-    //Samples encoders for current speed in rpm (should be sampled over 5ms)
-    double time_start;
-    boolean startSample = true;
-    int[] startCount;
-    int[] speeds1;
-    private int[] getMotorSpeeds(double sample_time){
-        if (startSample){
-            speeds1[0] = 0;
-            speeds1[1] = 0;
-            speeds1[2] = 0;
-            speeds1[3] = 0;
-            
-            startCount[0] = FL.getRaw();
-            startCount[1] = FR.getRaw();
-            startCount[2] = BL.getRaw();
-            startCount[3] = BR.getRaw();
-            
-            time_start = time.get();
-        }else if (time.get() - time_start > sample_time){
-            int end_count[] = {FL.getRaw(), FR.getRaw(), BL.getRaw(), BR.getRaw()};
-            for (int i = 0; i < 4; i++){
-                speeds1[0] = end_count[i] - startCount[i];
-            }
-        }
-        return speeds1;
-    }
 }
