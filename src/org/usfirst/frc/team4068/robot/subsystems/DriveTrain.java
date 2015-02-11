@@ -25,6 +25,8 @@ public class DriveTrain {
     private PIDController backLeft;
     private PIDController backRight;
     
+    private double rotationOffset = .1;
+    
     Timer time = new Timer();
     
     public DriveTrain(Motor fl, Motor fr, Motor bl, Motor br){
@@ -33,6 +35,8 @@ public class DriveTrain {
         FR = fr;
         BL = bl;
         BR = br;
+        
+        
         
         frontLeft = new PIDController(Kp, Ki, Kd, FL.getEncoder(), FL);
         frontRight = new PIDController(Kp, Ki, Kd, FR.getEncoder(), FR);
@@ -57,6 +61,9 @@ public class DriveTrain {
     
     public void drive(double movx, double movy, double rot){
         count++;
+        rotationOffset = SmartDashboard.getNumber("Rotation Offset");
+        rot = rot + (rotationOffset * movx); //causes robot to rotate based on strafing value
+        
         double fl = (movy -movx +rot);
         double fr = (-movy -movx +rot);
         double bl = (movy +movx +rot);

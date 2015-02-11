@@ -7,17 +7,26 @@ package org.usfirst.frc.team4068.robot.code;
 
 import org.usfirst.frc.team4068.robot.lib.Motor;
 import org.usfirst.frc.team4068.robot.lib.References;
+import org.usfirst.frc.team4068.robot.subsystems.BeltDrive;
+import org.usfirst.frc.team4068.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous implements Runnable{
     private String thread;
     private boolean run = false;
     
+    private BeltDrive belt = References.BELT;
+    private DriveTrain drive = References.DRIVE;
+    
+    private DigitalInput lSwitch = References.LIMIT1;
+    
     public Autonomous(String thread){
         this.thread = thread;
+        
     }
     
     public void run(){
@@ -91,5 +100,62 @@ public class Autonomous implements Runnable{
     
     private void test3(){
         
+    }
+    
+    public void program1()
+    {
+        belt.run(.5);
+        Timer.delay(.75);
+        belt.run(0);
+        drive.drive(0, -0.3, 0);
+        Timer.delay(2.75);
+        drive.drive(0, 0, 0);
+        belt.run(-.5);
+        Timer.delay(1);
+        belt.run(0);
+        drive.drive(0, -0.3, 0);
+        Timer.delay(.5);
+        drive.drive(0, 0, 0);
+        Timer.delay(15); // ensures that the program does not end before the end of the auto period
+    }
+    
+    public void program2()
+    {
+        
+        while (!lSwitch.get()){
+            belt.run(.5);
+        }
+        
+        belt.run(0);
+        
+        drive.drive( 0, -.5, 0);
+        Timer.delay(.3);
+        drive.drive(0, 0, 0);
+        
+        
+        drive.drive(.4, 0, -.1);
+        Timer.delay(1.4);
+        drive.drive(0, 0, 0);
+        
+        drive.drive(0, .3, 0);
+        Timer.delay(1);
+        drive.drive(0, 0, 0);
+        
+        belt.run(.5);
+        Timer.delay(4);
+        belt.run(0);
+        
+        /*
+        drive.drive(0, -0.5, 0);
+        Timer.delay(5);
+        drive.drive(0, 0, 0);
+        belt.run(-.5);
+        Timer.delay(2);
+        belt.run(0);
+        drive.drive(0, -0.5, 0);
+        Timer.delay(1.5);
+        drive.drive(0, 0, 0);
+        Timer.delay(1);
+        */
     }
 }

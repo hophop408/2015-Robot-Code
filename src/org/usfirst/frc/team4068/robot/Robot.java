@@ -47,12 +47,18 @@ public class Robot extends IterativeRobot {
         //toSend[0] = 76;
         //arduino.transaction(toSend, 1, null, 0);
         //serial.writeString("Comm:ping");
+        SmartDashboard.putNumber("Belt Time 1 (up tote)", 0);
+        SmartDashboard.putNumber("Drive Back 1", 0);
+        SmartDashboard.putNumber("Belt Time 2 (down tote)", 0);
+        SmartDashboard.putNumber("Drive Back 2", 0);
+        SmartDashboard.putNumber("Rotation Offset", 0);
     }
 
     /**
      * Autonomous section -- Runs for 15 seconds
      */
     public void autonomousInit() {
+        /*
         //init
         //this.m_ds.InDisabled(false);
         //this.m_ds.InAutonomous(true);
@@ -79,6 +85,9 @@ public class Robot extends IterativeRobot {
         time.stop();
         System.out.printf("Autonomous Disabled, ran for: %f", time.get());
         //this.m_ds.InAutonomous(false);
+         * 
+         */
+        auto1.program2();
     }
 
     /**

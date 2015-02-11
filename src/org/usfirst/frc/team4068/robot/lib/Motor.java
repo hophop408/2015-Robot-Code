@@ -12,6 +12,8 @@ public class Motor extends Talon{
     
     int signalsPerRotation;
     
+    private boolean verbose = false;
+    
     public Motor(int pwm, boolean invert) {
         super(pwm);
         this.invert = invert;
@@ -55,8 +57,14 @@ public class Motor extends Talon{
         this.signalsPerRotation = signalsPerRotation;
     }
     
+    public void setVerbose(boolean set){
+        verbose = set;
+    }
+    
     public void set(double speed){
-        System.out.println("Setting motor speed");
+        if(verbose) {
+            System.out.println(String.format("Setting motor to: %d", speed));
+        }
         super.set(invert ? -speed : speed);
     }
     
