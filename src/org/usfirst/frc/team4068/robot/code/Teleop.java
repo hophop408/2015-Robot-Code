@@ -31,7 +31,7 @@ public class Teleop implements Runnable{
     
     public Teleop(String thread){
         this.thread = thread;
-        //SmartDashboard.putBoolean("Xbox", false);
+        
     }
 
     @Override

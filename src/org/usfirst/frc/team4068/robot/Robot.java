@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Belt Time 2 (down tote)", 0);
         SmartDashboard.putNumber("Drive Back 2", 0);
         SmartDashboard.putNumber("Rotation Offset", 0);
+        SmartDashboard.putBoolean("Xbox", false);
     }
 
     /**
@@ -87,7 +88,7 @@ public class Robot extends IterativeRobot {
         //this.m_ds.InAutonomous(false);
          * 
          */
-        auto1.program2();
+        auto1.program3();
     }
 
     /**

@@ -158,4 +158,8 @@ public class Autonomous implements Runnable{
         Timer.delay(1);
         */
     }
+    
+    public void program3(){
+        drive.drive(.5, 0, 0);
+    }
 }

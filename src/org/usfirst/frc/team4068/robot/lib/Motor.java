@@ -62,9 +62,9 @@ public class Motor extends Talon{
     }
     
     public void set(double speed){
-        if(verbose) {
-            System.out.println(String.format("Setting motor to: %d", speed));
-        }
+        
+            //System.out.println(String.format("Setting motor to: %d", speed));
+        
         super.set(invert ? -speed : speed);
     }
     
