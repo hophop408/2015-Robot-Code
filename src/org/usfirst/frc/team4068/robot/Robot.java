@@ -88,7 +88,7 @@ public class Robot extends IterativeRobot {
         //this.m_ds.InAutonomous(false);
          * 
          */
-        auto1.program3();
+        auto1.program1();
     }
 
     /**
