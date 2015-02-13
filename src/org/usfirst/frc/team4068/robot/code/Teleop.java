@@ -153,6 +153,52 @@ public class Teleop implements Runnable{
             belt.set(0);
         }
         */
+        
+    Talon drivetrainLeft = new Talon(1);
+    
+    LiveWindow.addActuator("Drive train Left", (Talon) drivetrainLeft);
+    
+    Talon drivetrainRight = new Talon(1);
+	
+    LiveWindow.addActuator("Drive train Right", (Talon) drivetrainRight);
+    
+    RobotDrive drivetrainRobotDrive = new RobotDrive(drivetrainLeft, drivetrainRight);
+    
+    RobotDrive.drivetrainRobotDrive.setSafetyEnabled(false);
+    
+    RobotDrive.drivetrainRobotDrive.setExpiration(0.1);
+    
+    RobotDrive.drivetrainRobotDrive.setSensitivity(0.5);
+    
+    RobotDrive.drivetrainRobotDrive.setMaxOutput(1.0);
+    
+    Victor elevatorMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Elevator", (Victor) elevatorMotor);
+    
+    AnalogChannel elevatorHeight = new AnalogChannel(1);
+    
+    LiveWindow.addSensor("Elevator", elevatorHeight);
+    
+    Victor gripMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Grip", "Motor", (Victor) gripMotor);
+    
+    Victor FLMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Front Left Motor", (Victor) FLMotor);
+    
+    Victor FRMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Front Right Motor", (Victor) FRMotor);
+    
+    Victor BLMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Back Left Motor", (Victor) BLMotor);
+    
+    Victor BRMotor = new Victor(1);
+    
+    LiveWindow.addActuator("Back Right Motor", (Victor) BRMotor);
     }
     
 }
