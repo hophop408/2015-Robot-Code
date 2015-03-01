@@ -143,6 +143,53 @@ public class Teleop implements Runnable{
         }else{
             kicker.set(Value.kReverse);
         }
+        public class SmartDashboard extends Object {
+	{
+        
+	    RobotDrive.drivetrainRobotDrive.setSafetyEnabled(false);
+        
+	    RobotDrive.drivetrainRobotDrive.setExpiration(0.1);
+        
+	    RobotDrive.drivetrainRobotDrive.setSensitivity(0.5);
+        
+	    RobotDrive.drivetrainRobotDrive.setMaxOutput(1.0);
+        
+	    Victor elevatorMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Elevator", elevatorMotor.getRPM());
+        
+	    AnalogChannel elevatorHeight = new AnalogChannel(1);
+	    
+	    SmartDashboard.putNumber("Elevator", elevatorHeight);
+        
+	    Victor gripMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Grip Motor", (Victor) gripMotor.getRPM());
+	    
+	    Victor FLMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Front Left Motor", FLMotor.getRPM());
+	    
+	    Victor FRMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Front Right Motor", FRMotor.getRPM());
+	    
+	    Victor BLMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Back Left Motor", BLMotor.getRPM());
+	    
+	    Victor BRMotor = new Victor(1);
+	    
+	    SmartDashboard.putNumber("Back Right Motor", BRMotor.getRPM());
+	    
+	}
+	public void robotInt() {
+		autonomousCommand = new ExampleCommand();
+		
+		CommandBase.init();
+		SmartDahboard.putData(Scheduler.getInstance());
+		SmartDashboard.putData("Autonomous". Autonomous);
+	}
         
         /*
         if (driver.getButtonA()){
